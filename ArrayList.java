@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class ArrayListImpl<T> {
+class ArrayListImpl<T> {
     private T[] asArray;
     int size;
 

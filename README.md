@@ -1044,7 +1044,11 @@ class GFG {
     }
 }
 
-Output
+Output:
+
 Constructor with one argument - String: Sweta
+
 Constructor with two arguments:  String and Integer: Amiya 28
+
 Constructor with one argument: Long: 325614567
+

@@ -1,0 +1,123 @@
+class Node<T> {
+    public T data;
+    public Node<T> nextRef;
+
+    public Node(T data) {
+        this.data = data;
+    }
+
+//    public void displayNode() {
+//        System.out.println("data: " + data);
+//    }
+}
+
+class SingleLinkedListImpl<T> {
+    private Node<T> firstNode;
+    int size;
+
+    public SingleLinkedListImpl() {
+        firstNode = null;
+    }
+
+    public void addFirst(T data) {
+        Node<T> newNode = new Node<T>(data);
+        newNode.nextRef = firstNode;
+//        System.out.println(newNode.data);
+        firstNode = newNode;
+        System.out.println(firstNode.data);
+        size++;
+    }
+
+    public void deleteFirst() {
+        if (firstNode == null) {
+            throw new IllegalArgumentException("LinkedList doesn't contain any element");
+        }
+
+        Node<T> temp = firstNode;
+        firstNode = firstNode.nextRef;
+        temp.nextRef = null;
+        size--;
+    }
+
+    public void addAt(int index, T data) {
+        if (index < 0 || index > size) {
+            throw new IllegalArgumentException("index out of bounds");
+        }
+        if (size == 0) {
+            addFirst(data);
+        }
+        Node<T> current = firstNode;
+        int count = 0;
+        while (current != null && count < index - 1) {
+            current = current.nextRef;
+            count++;
+        }
+
+        if (current == null) {
+            throw new IllegalArgumentException("index out of bounds");
+        }
+        Node<T> newNode = new Node(data);
+        newNode.nextRef = current.nextRef;
+        current.nextRef = newNode;
+        size++;
+    }
+
+    public void deleteAt(int index) {
+        if (index < 0 || index >= size) {
+            throw new IllegalArgumentException("index out of bounds");
+        }
+        if (size == 0) {
+            throw new IllegalArgumentException("LinkedList doesn't contain any element");
+        }
+        if (index == 0) {
+            deleteFirst();
+            return;
+        }
+        Node<T> current = firstNode;
+        int count = 0;
+        while (current != null && count < index - 1) {
+            current = current.nextRef;
+            count++;
+        }
+        if (current == null) {
+            throw new IllegalArgumentException("index out of bounds");
+        }
+        Node<T> deleted = current.nextRef;          // node to remove
+        current.nextRef = deleted.nextRef;
+        size--;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SingleLinkedList [");
+        Node<T> cur = firstNode;
+        while (cur != null) {
+            sb.append(cur.data);
+            cur = cur.nextRef;
+            if (cur != null) sb.append(" -> ");
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+}
+public class SingleLinkedList {
+    public static void main(String[] args) {
+        SingleLinkedListImpl<Integer> list = new SingleLinkedListImpl<>();
+        list.addFirst(1);
+        list.addFirst(2);
+        list.addFirst(3);
+        System.out.println("------------------------------------");
+        System.out.println(list);
+        System.out.println("------------------------------------");
+        list.addAt(2, 44);
+        System.out.println(list);
+        System.out.println("------------------------------------");
+        list.deleteFirst();
+        System.out.println(list);
+        System.out.println("------------------------------------");
+        list.deleteAt(2);
+        System.out.println(list);
+        System.out.println("------------------------------------");
+    }
+}
