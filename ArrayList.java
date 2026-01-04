@@ -1,4 +1,11 @@
+/* Author:Harshavardhan Narayanaswamy
+................................
+Implementation of Double LinkedList in java
+................................
+Jan 03 2026 */
+
 import java.util.Arrays;
+import java.util.List;
 
 class ArrayListImpl<T> {
     private T[] asArray;
@@ -85,8 +92,6 @@ class ArrayListImpl<T> {
         return Arrays.toString(Arrays.copyOf(asArray, size));
     }
 }
-
-import java.util.List;
 
 public class ArrayList {
     public static void main(String[] args) {
