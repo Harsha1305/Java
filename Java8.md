@@ -457,7 +457,7 @@ public class MyClass{
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-class MyClass{
+public class MyClass{
     public static void main(String[] args){
         Predicate<Student> checkGradesAbove90 = x -> x.grade >= 90.00 && x.grade < 100.00;
         Predicate<Student> checkGradesAbove80 = x -> x.grade >= 80.00 && x.grade < 90.00;
@@ -522,3 +522,403 @@ class MyClass{
     }
 }
 
+# Function
+Represents a function that accepts one argument and produces a result.
+Type parameters:
+<T> – the type of the input to the function
+<R> – the type of the result of the function
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+public class FunctionImpl{
+
+    public static void main(String[] args){
+        Function<String,String> substring = s -> s.substring(0, 3);
+        Function<String,String> uppercase = s -> s.toUpperCase();
+        System.out.println(substring.andThen(uppercase).apply("harsha"));
+
+        Function<List<Student>,List<Student>> checkWithThePrefix = s -> {
+            List<Student> list = new ArrayList<>();
+            for(Student student : s){
+                if(substring.apply(student.getName()).equalsIgnoreCase("har"))
+                {
+                    list.add(student);
+                }
+            }
+            return list;
+        };
+
+        List<Student> students = new ArrayList<>();
+        students.add(new Student("Harsha", 90.5, 10));
+        students.add(new Student("Varun", 95.5, 10));
+        students.add(new Student("Harshitha", 80.5, 10));
+        students.add(new Student("Harshith", 79.5, 10));
+
+        System.out.println(checkWithThePrefix.apply(students));
+    }
+
+    private static class Student {
+        private String name;
+        private double grade;
+        private int classYear;
+
+        public Student(String name, double grade, int classYear) {
+            this.name = name;
+            this.grade = grade;
+            this.classYear = classYear;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public double getgrade() {
+            return grade;
+        }
+
+        public void setgrade(double marks) {
+            this.grade = marks;
+        }
+
+        public int getClassYear() {
+            return classYear;
+        }
+
+        public void setClassYear(int classYear) {
+            this.classYear = classYear;
+        }
+
+        @Override
+        public String toString() {
+            return "Student {" +
+                    "name ='" + name + '\'' +
+                    ", grade =" + grade +
+                    ", classYear =" + classYear +
+                    '}';
+        }
+    }
+}
+
+# Consumer:
+Represents an operation that accepts a single input argument and returns no result. Unlike most other functional interfaces, Consumer is expected to operate via side-effects.
+Type parameters:
+<T> – the type of the input to the operation
+
+Consumer<String> consumer = s -> System.out.println("s");
+consumer.accept("Hello from consumer");
+
+# Supplier:
+Represents a supplier of results.
+There is no requirement that a new or distinct result be returned each time the supplier is invoked.
+
+Supplier<String> suplier = () -> "Hello from Supplier";
+supplier.get();
+
+# Example for Consumer and supplier:
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.function.Consumer;
+class FunctionImpl{
+
+    public static void myFunction(){
+        Function<String,String> substring = s -> s.substring(0, 3);
+        Consumer<List<Student>> consumer = System.out::println;
+        Supplier<String>  supplier = () -> "hello from supplier";
+
+        Function<List<Student>,List<Student>> checkWithThePrefix = s -> {
+            List<Student> list = new ArrayList<>();
+            for(Student student : s){
+                if(substring.apply(student.getName()).equalsIgnoreCase("har"))
+                {
+                    list.add(student);
+                }
+            }
+            return list;
+        };
+
+        List<Student> students = new ArrayList<>();
+        students.add(new Student("Harsha", 90.5, 10));
+        students.add(new Student("Varun", 95.5, 10));
+        students.add(new Student("Harshitha", 80.5, 10));
+        students.add(new Student("Harshith", 79.5, 10));
+
+        System.out.println(checkWithThePrefix.apply(students));
+        System.out.print("Consumer output: ");
+        consumer.accept(students);
+        System.out.println(supplier.get());
+    }
+
+    private static class Student {
+        private String name;
+        private double grade;
+        private int classYear;
+
+        public Student(String name, double grade, int classYear) {
+            this.name = name;
+            this.grade = grade;
+            this.classYear = classYear;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public double getgrade() {
+            return grade;
+        }
+
+        public void setgrade(double marks) {
+            this.grade = marks;
+        }
+
+        public int getClassYear() {
+            return classYear;
+        }
+
+        public void setClassYear(int classYear) {
+            this.classYear = classYear;
+        }
+
+        @Override
+        public String toString() {
+            return "Student {" +
+                    "name ='" + name + '\'' +
+                    ", grade =" + grade +
+                    ", classYear =" + classYear +
+                    '}';
+        }
+    }
+}
+
+
+# BiFunction:
+It is similar to Function, But here it takes two input and gives one output
+Represents a function that accepts two arguments and produces a result. This is the two-arity specialization of Function.
+
+BiFunction<Integer, Integer, Integer> biFunction = (x, y) -> x + y;
+System.out.println(biFunction.apply(2,3));
+
+# BiPredicate:
+It is similar to Predicate, But here it takes two input and gives one output that is boolean value.
+Represents a predicate (boolean-valued function) of two arguments. This is the two-arity specialization of Predicate.
+
+ BiPredicate<Integer, Integer> biPredicate = (x, y) -> x > y;
+System.out.println(bipredicate.test(5,3));
+
+# BiConsumer:
+Represents an operation that accepts two input arguments and returns no result. This is the two-arity specialization of Consumer. Unlike most other functional interfaces, BiConsumer is expected to operate via side-effects.
+
+BiConsumer<Integer, Integer> biConsumer = (x, y) -> System.out.println(x + y);
+
+# UnaryOperator:
+It is similar to what function does, but it takes one input and return same type of output.
+Represents an operation on a single operand that produces a result of the same type as its operand. This is a specialization of Function for the case where the operand and result are of the same type.
+
+UnaryOperator<Integer> unaryOperator = x -> x * x;
+System.out.println(unaryOperator.apply(2));
+# BinaryOperator:
+It is similar to BiFunction , but it takes two same type of input and return one single output.
+Represents an operation upon two operands of the same type, producing a result of the same type as the operands. This is a specialization of BiFunction for the case where the operands and the result are all of the same type.
+
+BinaryOperator<Integer> binaryOperator = (x, y) -> x + y;
+System.out.println(unarybinaryOperatorOperator.apply(2,3));
+
+# Method reference and Constructor reference:
+Method reference allows us to refer to a method without invoking it.
+Which makes the code cleaner and more readable.
+They can be used in place of lambda expressions
+
+# Example 1:
+public class MethodReferenceImpl{
+    public static void print(String s){
+        System.out.println(s);
+    }
+    public static void main(String[] args){
+        List<String> string = Arrays.asList("alice", "bob", "calie");
+//        string.forEach(x -> System.out.println(x));
+        string.forEach(MethodReferenceImpl::print);
+    }
+}
+
+# Example 2:
+public class ConstructorReferenceImpl{
+    public static void main(String[] args){
+        List<Student> students = new ArrayList<>();
+//        students.add(new Student("Harsha", 90.5, 10));
+//        students.add(new Student("Varun", 95.5, 10));
+//        students.add(new Student("Harshitha", 80.5, 10));
+//        students.add(new Student("Harshith", 79.5, 10));
+
+//        students.add(Student::new("Harsh", 90.5, 10)); // Error ConstructorReferenceImpl.Student is not a functional interface
+
+        //Create a functional interface
+        //Instead of using lambda expressions use Constructor Reference
+        StudentFactory factory = Student::new;
+
+        students.add(factory.create("Harsha", 90.5, 10));
+        students.add(factory.create("Varun", 95.5, 10));
+        students.add(factory.create("Harsh", 90.5, 10));
+
+        students.sort(Comparator.comparing(s -> s.name));
+        students.forEach(System.out::println);
+    }
+    @FunctionalInterface
+    interface StudentFactory {
+        Student create(String name, double grade, int classYear);
+    }
+
+    private static class Student {
+        private String name;
+        private double grade;
+        private int classYear;
+
+        public Student(String name, double grade, int classYear) {
+            this.name = name;
+            this.grade = grade;
+            this.classYear = classYear;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public double getgrade() {
+            return grade;
+        }
+
+        public void setgrade(double marks) {
+            this.grade = marks;
+        }
+
+        public int getClassYear() {
+            return classYear;
+        }
+
+        public void setClassYear(int classYear) {
+            this.classYear = classYear;
+        }
+
+        @Override
+        public String toString() {
+            return "Student {" +
+                    "name ='" + name + '\'' +
+                    ", grade =" + grade +
+                    ", classYear =" + classYear +
+                    '}';
+        }
+    }
+}
+
+# Stream:
+Collection---------> Stream ------> Declarative/Functional
+A Stream in Java is a sequence of elements derived from a data source(Collections) that supports declarative, functional-style operations for processing data, without modifying the underlying source.
+
+1. Stream ≠ Collection
+Collection	          Stream
+Stores data	          Processes data
+Eager                 Lazy
+Can                   be traversed multiple times	Can be consumed once
+Mutable	              Immutable (no state change)
+
+2. Stream is a view, not storage
+List<Integer> list = List.of(1, 2, 3, 4);
+
+Stream<Integer> stream = list.stream();
+
+3.Declarative vs Imperative
+Imperative (how)
+for (int i : list) {
+    if (i > 2) {
+        System.out.println(i);
+    }
+}
+
+Declarative (what)
+list.stream()
+    .filter(i -> i > 2)
+    .forEach(System.out::println);
+You describe what to do, not how to loop.
+
+4.Functional-style operations
+
+Streams use:
+Predicate (filter)
+Function (map)
+Consumer (forEach)
+Supplier
+
+All operations are:
+Stateless
+Side-effect free (recommended)
+Composable
+
+5. Lazy evaluation (very important)
+list.stream()
+    .filter(i -> {
+        System.out.println("filtering " + i);
+        return i > 2;
+    });
+
+Nothing prints until a terminal operation like:
+.forEach(System.out::println);
+
+6. 
+| Type         | Examples                       | Behavior           |
+| ------------ | ------------------------------ | ------------------ |
+| Intermediate | `filter`, `map`, `sorted`      | Lazy               |
+| Terminal     | `forEach`, `collect`, `reduce` | Triggers execution |
+
+# Advantages:
+Readability: Streams provide a more readable and expressive way to perform operations on collections
+
+Flexibility: Streams allow you to perform a variety of operations on collections, such as filtering, mapping and reducing, without having to write multiple loops or methods.
+
+Parallelism: Streams can be processed in parallel, which can provide a significant performance boost for large collections.
+
+Encapsulation: Streams encourage encapsulation, as you can perform a series of operations on a collection without modifying the original data.
+
+ # Example 1:
+import java.util.Arrays;
+import java.util.stream.IntStream;
+
+ public class Approaches {
+        public static void main(String[] args) {
+            // Imperative approach
+            int[] array = {1, 2, 3, 4, 5};
+            int sum = 0;
+            for (int i = 0; i < array.length; i++) {
+                if (array[i] % 2 == 0) {
+                    sum += array[i];
+                }
+            }
+            System.out.println("sum using Imperative approach = " + sum);
+
+            //Stream
+            int[] arr = {1, 2, 3, 4, 5};
+            IntStream intStream = Arrays.stream(arr).filter(i -> i % 2 == 0);
+            System.out.println("--------------------------------------");
+            // IntStream will contain stream of result after filtering
+            //intStream = 2,4; 
+            System.out.println("filter using Imperative approach = " + intStream.count());
+            System.out.println("--------------------------------------");
+            int sumSt = Arrays.stream(arr).filter(n -> n % 2 == 0).sum();
+            System.out.println("sum using Imperative approach = " + sumSt);
+        }
+    }
+
+# Example 2:
