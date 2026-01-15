@@ -922,3 +922,289 @@ import java.util.stream.IntStream;
     }
 
 # Example 2:
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+public class Streams {
+    public static void main(String[] args) {
+//        Approaches.approach1();
+//        Approaches.approach2();
+        Approaches.approach3();
+    }
+}
+
+class Approaches {
+    public static void approach1() {
+        // Imperative approach
+        int[] array = {1, 2, 3, 4, 5};
+        int sum = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] % 2 == 0) {
+                sum += array[i];
+            }
+        }
+        System.out.println("sum using Imperative approach = " + sum);
+
+        //Stream/ Declarative
+        int[] arr = {1, 2, 3, 4, 5};
+        IntStream intStream = Arrays.stream(arr).filter(i -> i % 2 == 0);
+        System.out.println("--------------------------------------");
+        // IntStream will contain stream of result after filtering
+        //intStream = 2,4;
+        System.out.println("filter using Imperative approach = " + intStream.count());
+        System.out.println("--------------------------------------");
+        int sumSt = Arrays.stream(arr).filter(n -> n % 2 == 0).sum();
+        System.out.println("sum using Imperative approach = " + sumSt);
+    }
+
+    public static void approach2() {
+        // Stream.iterate(seed, UnaryOperator)
+        // UnaryOperator<T> takes T and returns T --> it takes one input and return same type of output
+        Stream<Integer> limit = Stream.iterate(0, i -> i + 1).limit(30);
+        //forEach(Consumer consumer) --> which will consume but does not return
+        limit.forEach(System.out::println);
+        System.out.println("--------------------------------------");
+
+        //map(function)  --> accepts one argument and produces a result
+        Stream<Integer> limit2 = Stream.iterate(0, i -> i + 1).limit(30);
+        limit2.map(x -> x / 5).distinct().forEach(System.out::println);
+    }
+
+    public static void approach3() {
+        List<Integer> list = Arrays.asList(1, 22, 3, 4, 5, 65, 74, 8, 9, 81);
+//        List<Integer> collect = list.stream().filter(i -> i % 2 == 0).map(x -> x * x).collect(Collectors.toList());
+//        System.out.println(collect);
+//        System.out.println("---------------------------------");
+//        List<Integer> result = collect.stream().map(x -> x / 2).collect(Collectors.toList());
+//        System.out.println(result);
+//        System.out.println("---------------------------------");
+//        result.stream().sorted().forEach(System.out::println);
+
+
+        //we can write above code in one line
+        System.out.println(list.stream().
+                filter(x -> x % 2 == 0).
+                map(x -> x * x).sorted().
+                max((a, b) -> b - a).stream().count());
+        System.out.println("-------------------------------------------");
+        System.out.println(list.stream()
+                .filter(x -> x % 2 == 0)
+                .map(x -> x * x)
+                .sorted()
+                .max((a, b) -> b - a)
+                .stream()
+                .findAny().orElse(0));
+        System.out.println("-------------------------------------------");
+        System.out.println(list.stream()
+                .filter(x -> x % 2 == 0)
+                .map(x -> x * x)
+                .sorted()
+                .max((a, b) -> a - b)
+                .stream()
+                .findAny().orElse(0));
+    }
+}
+
+# Data and Time:
+# Limitation in java 7:
+1. Mutable
+2. Confusion
+3. Zone time difference
+
+Java 8 has introduced new classes
+1. Local Date : Represents a date without a time zone
+2. Local Time : Represents a time without a date or time zone
+3. Local Date Time: Represents a date and time without a time zone
+4. Zoned Date Time: Represents a date and time with a time zone
+5. Instant : Represents an instantaneous point on the timeline, typically used for machine time stamps
+6. Peroid : Represents a duration of time between two points in time
+7. Duration : Represents a period of time between two dates
+8. Date time formatter : Formats and parses dates and times
+
+# Example 1:
+import java.time.LocalDate;
+import java.time.Month;
+
+public class Java8Date {
+    public static void main(String[] args) {
+        LocalDate today = LocalDate.now();
+        LocalDate customDate = LocalDate.of(2018, 1, 1);
+        System.out.println(customDate);
+        System.out.println("-----------------------------------------------");
+        int day = today.getDayOfMonth();
+        Month month = today.getMonth();
+        int year = today.getYear();
+        System.out.println("day: " + day + ", month: " + month + ", year: " + year);
+
+        System.out.println("-----------------------------");
+        LocalDate tomorrow = today.plusDays(1);
+        LocalDate yesterday = today.minusDays(1);
+        System.out.println("Tomorrow: " + tomorrow );
+        System.out.println("Yesterday: " + yesterday);
+    }
+}
+
+2018-01-01
+-----------------------------------------------
+day: 14, month: JANUARY, year: 2026
+-----------------------------
+Tomorrow: 2026-01-15
+Yesterday: 2026-01-13
+
+# Example 2:
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Set;
+
+public class Main {
+    public static void main(String[] args) {
+        LocalTime now = LocalTime.now();
+        System.out.println(now);
+        System.out.println("Current clock hour " + now.getHour());
+        System.out.println("------------------------------");
+        LocalTime customTime = LocalTime.of(15, 45, 59);
+        System.out.println(customTime.getHour() + ":" + customTime.getMinute() + ":" + customTime.getSecond());
+        System.out.println("-----------------------------");
+
+        ZonedDateTime zonedDateTime = ZonedDateTime.now();
+        System.out.println(zonedDateTime);
+        System.out.println("Current zone " +  zonedDateTime.getZone());
+        System.out.println("Current UTC time zone" + zonedDateTime.getOffset());
+        System.out.println("------------------------------------");
+        Set<String> availableZoneIds = ZoneId.getAvailableZoneIds();
+        availableZoneIds.forEach(System.out::println);
+        System.out.println("-------------------------------------");
+        ZonedDateTime zonedDateTime2 = ZonedDateTime.now(ZoneId.of("Asia/Calcutta"));
+        System.out.println("Current time in India : " + zonedDateTime2);
+        System.out.println("--------------------------------------");
+    }
+}
+
+09:49:25.988656600
+Current clock hour 9
+------------------------------
+15:45:59
+-----------------------------
+2026-01-14T09:49:26.004296900-06:00[America/Chicago]
+Current zone America/Chicago
+Current UTC time zone-06:00
+------------------------------------
+Asia/Aden
+America/Cuiaba
+Etc/GMT+9
+Etc/GMT+8
+Africa/Nairobi
+America/Marigot
+Asia/Aqtau
+Pacific/Kwajalein
+America/El_Salvador
+Asia/Pontianak
+-------------------------------------
+Current time in India : 2026-01-14T21:19:26.004296900+05:30[Asia/Calcutta]
+--------------------------------------
+
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZonedDateTime;
+import java.util.Optional;
+
+class Employee{
+    private String firstName;
+    private String lastName;
+    private LocalDate dateOfBirth;
+    private ZonedDateTime zonedDateTime;
+
+    public Employee()
+    {
+
+    }
+    public Employee(String firstName, String lastName, LocalDate dateOfBirth, ZonedDateTime zonedDateTime) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.zonedDateTime = zonedDateTime;
+    }
+
+    public Optional<String> getFirstName() {
+        return Optional.of(firstName);
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public Optional<String> getLastName() {
+        return Optional.of(lastName);
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public ZonedDateTime getZonedDateTime() {
+        return zonedDateTime;
+    }
+
+    public void setZonedDateTime(ZonedDateTime zonedDateTime) {
+        this.zonedDateTime = zonedDateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", zonedDateTime=" + zonedDateTime +
+                '}';
+    }
+}
+public class OptionalClass {
+    public static void main(String[] args) {
+        Employee employee = new Employee();
+        employee.setFirstName("John");
+        employee.setLastName("Doe");
+        employee.setDateOfBirth(LocalDate.of(1990, Month.JANUARY, 1));
+        employee.setZonedDateTime(ZonedDateTime.now());
+
+        if(employee.getFirstName() != null && employee.getLastName() != null)
+        {
+            System.out.println(employee);
+        }
+
+        if(employee.getFirstName().isPresent() &&  employee.getLastName().isPresent())
+        {
+            System.out.println(employee);
+        }
+
+        // IT IS WORKING AS SUB QUERRY --> if get firstname is present then go to flatmap --> lambda expressions decides the result
+        // if get lastname is also not null , return Optional<Employee> from map function
+        employee.getFirstName()
+                .flatMap(f -> employee.getLastName().map(l -> employee))
+                .ifPresent(System.out::println);
+
+        // throw exception error if you didn't find the value using .get()
+        String firstName = employee.getFirstName().isPresent() ? employee.getFirstName().get() : "NA";
+
+        //ifPresent is a safe code Executes an action only if present
+        // Never returns null
+        employee.getFirstName().ifPresent(System.out::println);
+
+    }
+}
+
+Employee{firstName='John', lastName='Doe', dateOfBirth=1990-01-01, zonedDateTime=2026-01-15T11:47:17.686099200-06:00[America/Chicago]}
+Employee{firstName='John', lastName='Doe', dateOfBirth=1990-01-01, zonedDateTime=2026-01-15T11:47:17.686099200-06:00[America/Chicago]}
+Employee{firstName='John', lastName='Doe', dateOfBirth=1990-01-01, zonedDateTime=2026-01-15T11:47:17.686099200-06:00[America/Chicago]}
+John
